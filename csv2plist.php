@@ -1,7 +1,6 @@
 <?php
-// 引数の処理
-if ($argc == 2)
-{
+    if ($argc == 2)
+    {
         $filename = $argv[1];
         $hasTitleRow = false;
     }
@@ -10,13 +9,13 @@ if ($argc == 2)
         $hasTitleRow = true;
     }
     else {
-        echo "Usage: php makeplist.php [-t] <filename>\n";
+        echo "Usage: php csv2plist.php [-t] <filename>\n";
         echo "  -t             The file has a title row.\n";
         exit();
     }
     
     
-    // ファイルオープン
+    // open file
     if (!file_exists($filename)) {
         echo "No such file $filename\n";
         exit();
@@ -28,7 +27,7 @@ if ($argc == 2)
     $fp_in = fopen($filename, "r");
     $fp_out = fopen($filename_out, "w");
     
-    // タイトル行を取得
+    // get title
     if ($hasTitleRow) {
         $data = fgetcsv($fp_in, 1000, ",");
         $num = count($data);
@@ -38,7 +37,7 @@ if ($argc == 2)
         }
     }
     
-    // plist生成
+    // generate plist
     fwrite($fp_out, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     fwrite($fp_out, "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n");
     fwrite($fp_out, "<plist version=\"1.0\">\n");
@@ -53,7 +52,7 @@ while ($data = fgetcsv($fp_in, 1000, ",")) {
             fwrite($fp_out, "\t\t<key>$keys[$i]</key>\n");
         }
         else {
-            fwrite($fp_out, "\t\t<key>keyname$i</key>\n");
+            fwrite($fp_out, "\t\t<key>key$i</key>\n");
         }
         fwrite($fp_out, "\t\t<string>".$data[$i]."</string>\n");
     }
